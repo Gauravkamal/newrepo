@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Json Update Command practice</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+
+    </head>
+    <body>
+    <h1>Update Data</h1>
+    <input type="number" id="index" placeholder="Index number" name="index"><br><br>
+    <input type="text" id="name" maxlength="50" placeholder="Name" name="name"  /><br><br>
+        
+        <input type="email" id="email"  placeholder="Email" name="email"  /><br><br>
+        <input type="button" value="UPDATE DATA" onclick="updateData();"/>
+        <input type="reset">
+    <p id="show"></p>
+    <br><br><a href="Starting.html">Back </a><br>
+    <script>
+        function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+            var url = dbBaseUrl + apiEndPointUrl;
+            var jsonObj;
+            $.post(url, reqString, function (result) {
+                jsonObj = JSON.parse(result);
+            }).fail(function (result) {
+                var dataJsonObj = result.responseText;
+                jsonObj = JSON.parse(dataJsonObj);
+            });
+            return jsonObj;
+        }
+        function updateData(){
+            var index = parseInt(document.getElementById("index").value);
+            var token = "90938758|-31948833288200067|90945862";
+            var dbname = "Employee";
+            var relationName = "Test";
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            
+            var jsonObj = {
+                Name: name,
+                Email : email,
+            };
+            var reqString = createUPDATERecordRequest(token, JSON.stringify(jsonObj), dbname, relationName, index);
+            alert(reqString);
+            jQuery.ajaxSetup({async: false});
+            var resultObj = executeCommand(reqString,
+                    "http://api.login2explore.com:5577", "/api/iml");
+            jQuery.ajaxSetup({async: true});
+            alert(JSON.stringify(resultObj));
+            
+        }
+    </script>
+    </body>
+</html>

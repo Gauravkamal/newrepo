@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://login2explore.com/jpdb/resources/js/0.0.4/jpdb-commons.js"></script>
+    <title>Json Delete command</title>
+</head>
+<h1>Delete a Data</h1>
+
+<body>
+    <input type="number" id="index" placeholder="Index of Data">
+    <input type="button" value="Delete" placeholder="Delete" onclick=deleteData();><br><br>
+
+    <a href="Starting.html">Back </a><br>
+
+
+    <script>
+        function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+            var url = dbBaseUrl + apiEndPointUrl;
+            var jsonObj;
+            $.post(url, reqString, function (result) {
+                jsonObj = JSON.parse(result);
+            }).fail(function (result) {
+                var dataJsonObj = result.responseText;
+                jsonObj = JSON.parse(dataJsonObj);
+            });
+            return jsonObj;
+        }
+        function deleteData(){
+            var token = "90938758|-31948833288200067|90945862";
+            var dbname = "Employee";
+            var relationName = "Test";
+            var record = parseInt(document.getElementById("index").value);
+
+            var reqString = createREMOVERecordRequest(token, dbname, relationName, record);
+            alert(reqString);
+            jQuery.ajaxSetup({async: false});
+            var resultObj = executeCommand(reqString,
+                    "http://api.login2explore.com:5577", "/api/iml");
+            jQuery.ajaxSetup({async: true});
+            alert(JSON.stringify(resultObj));
+            
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://login2explore.com/jpdb/resources/js/0.0.4/jpdb-commons.js"></script>
+    <title>Show data Command</title>
+</head>
+<h1>Json Practice for Show Data</h1>
+
+<body>
+    <input type="text" id="name" placeholder="Enter the name" name="name"><br>
+    <input type="Email" id="email" placeholder="Enter your email" name="name"><br>
+    <input type="text" id="id" placeholder="Enter your ID" name="Id"><br>
+    <input type="button" value="Search" placeholder="Search" onclick=showData();><br><br>
+    <a href="Starting.html">Back </a><br>
+
+
+    <h6>Im Still learning JavaScript so some of the feactures are not working properly</h6>
+
+    <script>
+        function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+            var url = dbBaseUrl + apiEndPointUrl;
+            var jsonObj;
+            $.post(url, reqString, function (result) {
+                jsonObj = JSON.parse(result);
+            }).fail(function (result) {
+                var dataJsonObj = result.responseText;
+                jsonObj = JSON.parse(dataJsonObj);
+            });
+            return jsonObj;
+        }
+        function showData() {
+            var token = "90938758|-31948833288200067|90945862";
+            var dbname = "Employee";
+            var id = document.getElementById("id").value;
+            var relationName = "Test";
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var jsonStr = {
+                
+               Name: name,
+                
+
+            };
+            var reqString = createGETRequest(token, dbname, relationName, JSON.stringify(jsonStr));
+            alert(reqString);
+            jQuery.ajaxSetup({ async: false });
+            var resultObj = executeCommand(reqString,
+                "http://api.login2explore.com:5577", "/api/irl");
+            jQuery.ajaxSetup({ async: true });
+
+            var data = JSON.stringify(resultObj);
+            alert(JSON.stringify(resultObj));
+
+
+
+        }
+    </script>
+</body>
+
+</html>
